@@ -25,7 +25,9 @@ main_menu = @() menu(...
     'RedFilter', ...
     'BinaryMask', ...
     'MeanFilter', ...
-    'Frosty' ...
+    'Frosty', ...
+    'ScaleNearest', ...
+    'ScaleBilinear' ...
 );
 
 % Display a menu and get a choice
@@ -121,7 +123,9 @@ while choice ~= 1
             newImage = luminance_L(current_img);
             
             % Compare two images
-            displaySideBySide(current_img, newImage);
+            % Have to use different image plot function to avoid "imagesc"
+            % applying a colormap.
+            displaySideBySide(current_img, newImage, @(img) imshow(img));
             
             % Save the new image
             saveImage(newImage)
@@ -174,6 +178,36 @@ while choice ~= 1
             n = str2num(answer{1});
             m = str2num(answer{2});
             newImage = frosty(current_img, n, m);
+            
+            % Compare two images
+            displaySideBySide(current_img, newImage);
+            
+            % Save the new image
+            saveImage(newImage)
+        case 14
+            % Scale Nearest
+            % Get user input
+            answer = inputdlg('Enter scaling factor:', ...
+               'Scale Nearest', 1, {'1'});
+           
+            % Convert input to number, generate new image
+            factor = str2num(answer{1});
+            newImage = scaleNearest(current_img, factor);
+            
+            % Compare two images
+            displaySideBySide(current_img, newImage);
+            
+            % Save the new image
+            saveImage(newImage)
+        case 15
+            % Scale Bilinear
+            % Get user input
+            answer = inputdlg('Enter scaling factor:', ...
+               'Scale Bilinear', 1, {'1'});
+           
+            % Convert input to number, generate new image
+            factor = str2num(answer{1});
+            newImage = scaleBilinear(current_img, factor);
             
             % Compare two images
             displaySideBySide(current_img, newImage);
