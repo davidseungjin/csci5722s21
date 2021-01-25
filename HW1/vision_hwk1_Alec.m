@@ -27,7 +27,8 @@ main_menu = @() menu(...
     'MeanFilter', ...
     'Frosty', ...
     'ScaleNearest', ...
-    'ScaleBilinear' ...
+    'ScaleBilinear', ...
+    'SwirlFilter' ...
 );
 
 % Display a menu and get a choice
@@ -208,6 +209,26 @@ while choice ~= 1
             % Convert input to number, generate new image
             factor = str2num(answer{1});
             newImage = scaleBilinear(current_img, factor);
+            
+            % Compare two images
+            displaySideBySide(current_img, newImage);
+            
+            % Save the new image
+            saveImage(newImage)
+        case 16
+            % Swirl Filter
+            % Find center of image to auto-supply them in inputs for ease
+            [numRows, numColumns, numColorChannels] = size(current_img);
+            
+            % Get user input
+            answer = inputdlg({'factor:', 'ox', 'oy'}, ...
+               'Swirl Filter', 3, {'1', int2str(numRows/2), int2str(numColumns/2)});
+           
+            % Convert input to number, generate new image
+            factor = str2num(answer{1});
+            ox = str2num(answer{2});
+            oy = str2num(answer{3});
+            newImage = swirlFilter(current_img, factor, ox, oy);
             
             % Compare two images
             displaySideBySide(current_img, newImage);
