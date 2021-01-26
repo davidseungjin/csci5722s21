@@ -6,7 +6,7 @@ function [outImg] = D_ScaleNearest(inImg, factor)
 
 myinput = imread(inImg);
 [myrow, mycol, mychannel] = size(myinput);
-out_row = myrow * 1
+out_row = round(myrow * factor)
 out_col = round(mycol * factor)
 
 outImg = zeros(out_row, out_col, mychannel, class(myinput));
@@ -17,7 +17,7 @@ outImg = zeros(out_row, out_col, mychannel, class(myinput));
 
 for i = 1:out_row
     for j = 1:out_col
-        [ori_x ori_y] = D_sampleNearest(i, j, myrow, mycol, 1, factor);
+        [ori_x ori_y] = D_sampleNearest(i, j, myrow, mycol, factor, factor);
         outImg(i,j,:) = myinput(ori_x, ori_y, :);
     end
 end
