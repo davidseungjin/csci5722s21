@@ -3,7 +3,7 @@
 % Assignment #: 1
 % Instructor: Fleming
 
-function [outImg] = swirlFilter(inImg, factor, ox, oy)
+function [outImg] = swirlFilter(inImg, factor, oy, ox)
 
 [numRows, numColumns, numColorChannels] = size(inImg);
 outImg = inImg;
@@ -17,15 +17,15 @@ maxAngle = 2*pi*factor;
 for i = 1:numRows
     for j = 1:numColumns
         % Calculate the distance from the current pixel to the origin.
-        distance = sqrt((i-ox)^2 + (j-oy)^2);
+        distance = sqrt((i-oy)^2 + (j-ox)^2);
 
         % Determine if we are in the bounds of the radius around the
         % specified origin.
         if distance <= radius
             % Calculate our new coordinates to sample from in the original image.
             angle = maxAngle * distance / radius;
-            x = (i-ox)*cos(angle) - (j-oy)*sin(angle) + ox;
-            y = (i-ox)*sin(angle) + (j-oy)*cos(angle) + oy;
+            y = (i-oy)*cos(angle) - (j-ox)*sin(angle) + oy;
+            x = (i-oy)*sin(angle) + (j-ox)*cos(angle) + ox;
 
             % Sample for the pixel we wish to update the current one with.
             outImg(i,j,:) = sampleBilinear(inImg, factor, y, x);
