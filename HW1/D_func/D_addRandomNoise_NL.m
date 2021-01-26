@@ -9,6 +9,9 @@ myinput = imread(inImg);
 % declare and initialize array having random numbers in the range [-255, 255] with the same dimension
 myrandom = randi([-255, 255], myrow, mycol, mychannel, class(myinput))
 
+% Question: if uint8 is 0~255, is that any meaning to assign 
+% randi [-255, 255] ? In fact, it will apply [0, 255] because of the data type
+
 % Loop to assign new value after processing original pixel value.
 % resulting value will be 255 - original value.
 outImg = myinput + myrandom;
