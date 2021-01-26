@@ -28,7 +28,8 @@ main_menu = @() menu(...
     'Frosty', ...
     'ScaleNearest', ...
     'ScaleBilinear', ...
-    'SwirlFilter' ...
+    'SwirlFilter', ...
+    'FamousMe' ...
 );
 
 % Display a menu and get a choice
@@ -42,7 +43,7 @@ while choice ~= 1
             choice = main_menu();
         case 2
             % Load an image
-            image_choice = menu('Choose an image', 'lena1', 'mandrill1', 'sully', 'yoda', 'shrek', 'wrench');
+            image_choice = menu('Choose an image', 'lena1', 'mandrill1', 'sully', 'yoda', 'shrek', 'wrench', 'mars');
             switch image_choice
                case 1
                    filename = 'lena1.jpg';
@@ -56,6 +57,8 @@ while choice ~= 1
                    filename = 'shrek.bmp';
                case 6
                    filename = 'wrench1.jpg';
+               case 7
+                   filename = 'mars.jpg';
             end
             current_img = imread(filename);
         case 3
@@ -150,7 +153,7 @@ while choice ~= 1
             newImage = binaryMask(current_img);
             
             % Compare two images
-            displaySideBySide(current_img, newImage);
+            displaySideBySide(current_img, newImage, @(img) imshow(img));
             
             % Save the new image
             saveImage(newImage)
@@ -232,6 +235,31 @@ while choice ~= 1
             
             % Compare two images
             displaySideBySide(current_img, newImage);
+            
+            % Save the new image
+            saveImage(newImage)
+        case 17
+            % Famous Me
+            me = imread('alec.png');
+            
+            % Get user input
+            answer = inputdlg({'factor:', 'x', 'y'}, ...
+               'Famous Me', 3, {'4', '1500', '1000'});
+           
+            % Convert input to number, generate new image
+            factor = str2num(answer{1});
+            x = str2num(answer{2});
+            y = str2num(answer{3});
+            newImage = famousMe(current_img, me, x, y, factor);
+            
+            % Compare two images
+            figure
+            subplot(1,3,1)
+            imagesc(me);
+            subplot(1,3,2)
+            imagesc(current_img);
+            subplot(1,3,3)
+            imagesc(newImage);
             
             % Save the new image
             saveImage(newImage)
