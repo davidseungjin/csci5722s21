@@ -3,14 +3,15 @@ function [outImg] = meanFilter(inImg, kernel_size)
 [numRows, numColumns, numColorChannels] = size(inImg);
 
 outImg = inImg;
+indexSpread = floor(kernel_size/2);
 
 for i = 1:numRows
     for j = 1:numColumns
         % Compute bounds for neighbors.
-        left_index = i-kernel_size+2;
-        right_index = i+kernel_size-2;
-        top_index = j-kernel_size+2;
-        bottom_index = j+kernel_size-2;
+        left_index = i-indexSpread;
+        right_index = i+indexSpread;
+        top_index = j-indexSpread;
+        bottom_index = j+indexSpread;
         
         % Avoid out of bounds by setting to min/max index if the index goes
         % outside of the image.
