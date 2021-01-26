@@ -1,3 +1,8 @@
+% Names: Alec Bell, David Lee
+% Course #: CSCI 5722
+% Assignment #: 1
+% Instructor: Fleming
+
 function [] = saveImage(img)
 % Saves img to corresponding fileName
 

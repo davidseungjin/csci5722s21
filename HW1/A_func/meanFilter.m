@@ -1,8 +1,20 @@
+% Names: Alec Bell, David Lee
+% Course #: CSCI 5722
+% Assignment #: 1
+% Instructor: Fleming
+
 function [outImg] = meanFilter(inImg, kernel_size)
+% Applies a mean filter to a pixel based on the surrounding pixels.
+% kernel_size tells us the size of the window we will use to collect
+% neighbors.
 
 [numRows, numColumns, numColorChannels] = size(inImg);
 
 outImg = inImg;
+
+% Calculate the number of indices we wish to extend outwards from the pixel
+% we're currently iterating over to help us find all the neighboring
+% pixels.
 indexSpread = floor(kernel_size/2);
 
 for i = 1:numRows

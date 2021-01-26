@@ -1,6 +1,10 @@
-function [] = displaySideBySide(img1, img2, imgPlotFunction)
+% Names: Alec Bell, David Lee
+% Course #: CSCI 5722
+% Assignment #: 1
+% Instructor: Fleming
 
-% Display both images side by side.
+function [] = displaySideBySide(img1, img2, imgPlotFunction)
+% Display two images side by side.
 
 if nargin < 3
     imgPlotFunction = @(img) imagesc(img);

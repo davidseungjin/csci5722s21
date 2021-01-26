@@ -1,7 +1,16 @@
+% Names: Alec Bell, David Lee
+% Course #: CSCI 5722
+% Assignment #: 1
+% Instructor: Fleming
+
 function [outImg] = redFilter(inImg, redVal)
+% Creates a new image; by applying the luminance function to the left third
+% of the image and applying the red filter algorithm to the right third of
+% the image. The center is left the same.
 
 [numRows, numColumns, numColorChannels] = size(inImg);
 
+% Calculate the width of each third of the image.
 width = floor(numColumns/3);
 
 % Left   1/3: grayscale
@@ -18,7 +27,7 @@ middleImg = inImg(:,width+1:width*2,:);
 
 % Right  1/3: red filter
 rightImg = inImg(:,width*2+1:numColumns,:);
-remainder = (1-redVal) / 2;
+remainder = (1-redVal) / 2; % need to calculate the remainder for the weighted values to ensure it totals to 1
 rightImg(:,:,1) = redVal*rightImg(:,:,1);
 rightImg(:,:,2) = remainder*rightImg(:,:,2);
 rightImg(:,:,3) = remainder*rightImg(:,:,3);

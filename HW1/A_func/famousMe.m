@@ -1,4 +1,12 @@
+% Names: Alec Bell, David Lee
+% Course #: CSCI 5722
+% Assignment #: 1
+% Instructor: Fleming
+
 function [outImg] = famousMe(backgroundImg, humanImg, x, y, factor)
+% Crops out an image of a human and places it onto a background in a
+% specified position. Also allows for the human image to be scaled by a
+% factor.
 
 % Scale human image
 scaledHumanImg = scaleBilinear(humanImg, factor);
@@ -19,6 +27,8 @@ WHITE = [255, 255, 255];
 outImg = backgroundImg;
 i = 1;
 j = 1;
+% These loop conditions certify that we don't go out of bounds of either
+% image.
 while i <= numRowsHumanImg && i+y <= numRowsBackgroundImg
     j = 1;
     while j <= numColumnsHumanImg && j+x <= numColumnsBackgroundImg

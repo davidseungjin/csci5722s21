@@ -1,4 +1,11 @@
+% Names: Alec Bell, David Lee
+% Course #: CSCI 5722
+% Assignment #: 1
+% Instructor: Fleming
+
 function [outImg] = frosty(inImg, n, m)
+% Applies a frosty filter by randomly selecting a neighboring pixel (or
+% itself) within an (n,m) window around each pixel.
 
 [numRows, numColumns, numColorChannels] = size(inImg);
 
@@ -31,7 +38,7 @@ for i = 1:numRows
         random_row_index = randi([left_index right_index], 1);
         random_col_index = randi([top_index bottom_index], 1);
 
-        % Compute averages for each color and assign accordingly.
+        % Assigns the RGB values of the random neighboring pixel selected.
         outImg(i,j,:) = inImg(random_row_index, random_col_index, :);
     end
 end

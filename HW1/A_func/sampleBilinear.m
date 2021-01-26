@@ -1,4 +1,11 @@
+% Names: Alec Bell, David Lee
+% Course #: CSCI 5722
+% Assignment #: 1
+% Instructor: Fleming
+
 function [pixel] = sampleBilinear(img, factor, i, j)
+% Samples an image bilinearly to grab a more accurate representation of the
+% pixel in a scaled image.
 
 [numRows, numColumns, numColorChannels] = size(img);
 
@@ -16,6 +23,7 @@ elseif original_j > numColumns
     original_j = numColumns;
 end
 
+% Grab all four pixels that these indices could possibly round to.
 pixels = [ ...
     img(floor(original_i), floor(original_j), :), ...
     img(floor(original_i), ceil(original_j), :), ...
@@ -23,6 +31,7 @@ pixels = [ ...
     img(ceil(original_i), ceil(original_j), :) ...
 ];
 
+% Calculate the mean value of all four pixels.
 pixel = [mean(pixels(:,:,1)), mean(pixels(:,:,2)), mean(pixels(:,:,3))];
 
 end

@@ -1,9 +1,10 @@
 % This script creates a menu driven application
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%
-%
-% Alec Bell
-%
+% Names: Alec Bell, David Lee
+% Course #: CSCI 5722
+% Assignment #: 1
+% Instructor: Fleming
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 clear all;
 close all;
