@@ -12,7 +12,8 @@ function [outImg] = famousMe(backgroundImg, humanImg, x, y, factor)
 scaledHumanImg = scaleBilinear(humanImg, factor);
 
 % Generate binary mask
-humanImgBinaryMask = binaryMask(scaledHumanImg);
+grayScaleHumanImg = luminance_L(scaledHumanImg);
+humanImgBinaryMask = binaryMask(grayScaleHumanImg);
 
 % Place the human image on the background image.
 % When the human image's corresponding pixel is white on the binary mask,

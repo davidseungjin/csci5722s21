@@ -229,13 +229,13 @@ while choice ~= 1
             
             % Get user input
             answer = inputdlg({'factor:', 'ox', 'oy'}, ...
-               'Swirl Filter', 3, {'1', int2str(numRows/2), int2str(numColumns/2)});
+               'Swirl Filter', 3, {'1', int2str(numColumns/2), int2str(numRows/2)});
            
             % Convert input to number, generate new image
             factor = str2num(answer{1});
             ox = str2num(answer{2});
             oy = str2num(answer{3});
-            newImage = swirlFilter(current_img, factor, ox, oy);
+            newImage = swirlFilter(current_img, factor, oy, ox);
             
             % Compare two images
             displaySideBySide(current_img, newImage);
@@ -248,7 +248,7 @@ while choice ~= 1
             
             % Get user input
             answer = inputdlg({'factor:', 'x', 'y'}, ...
-               'Famous Me', 3, {'4', '1500', '1000'});
+               'Famous Me', 3, {'1', '0', '0'});
            
             % Convert input to number, generate new image
             factor = str2num(answer{1});
