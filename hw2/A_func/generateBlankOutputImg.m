@@ -6,7 +6,7 @@
 function [outImg] = generateBlankOutputImg(img1, img2, H)
 
 
-[numRows, numColumns, ~] = size(img2)
+[numRows, numColumns, ~] = size(img2);
 
 img2TopLeftCornerPos = H * [1; 1; 1];
 img2TopLeftCornerPos = img2TopLeftCornerPos / img2TopLeftCornerPos(3);
@@ -22,11 +22,11 @@ img2BottomRightCornerPos = img2BottomRightCornerPos / img2BottomRightCornerPos(3
 
 [img1NumRows, img1NumColumns, ~] = size(img1);
 
-extremitiesX = [img2TopLeftCornerPos(1) img2TopRightCornerPos(1) img2BottomLeftCornerPos(1) img2BottomRightCornerPos(1) img1NumColumns 1]
+extremitiesX = [img2TopLeftCornerPos(1) img2TopRightCornerPos(1) img2BottomLeftCornerPos(1) img2BottomRightCornerPos(1) img1NumColumns 1];
 minX = floor(min(extremitiesX));
 maxX = ceil(max(extremitiesX));
 
-extremitiesY = [img2TopLeftCornerPos(2) img2TopRightCornerPos(2) img2BottomLeftCornerPos(2) img2BottomRightCornerPos(2) img1NumRows 1]
+extremitiesY = [img2TopLeftCornerPos(2) img2TopRightCornerPos(2) img2BottomLeftCornerPos(2) img2BottomRightCornerPos(2) img1NumRows 1];
 minY = floor(min(extremitiesY));
 maxY = ceil(max(extremitiesY));
 
