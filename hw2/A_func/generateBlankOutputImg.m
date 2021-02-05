@@ -34,14 +34,15 @@ maxY = ceil(max(extremitiesY));
 outputNumRows = maxY - minY + 1;
 outputNumColumns = maxX - minX + 1;
 
-outImg = zeros(outputNumRows, outputNumColumns, 3, class(img1));
+% use double datatype to use NaN. (to avoid zero values in pixels of img1)
+outImg = NaN(outputNumRows, outputNumColumns, 3, 'double');
 
 
 % We will need those values above to transform the pixels after warping
 % them to ensure they end up in the correct position on the outImg!
 % Also need to figure out where to position img1
 
-outImg(2-minY:img1NumRows-minY+1, 2-minX:img1NumColumns-minX+1,:) = img1;
+outImg(2-minY:img1NumRows-minY+1, 2-minX:img1NumColumns-minX+1,:) = double(img1)/double(intmax(class(img1)));
 
 
 
@@ -55,7 +56,7 @@ outImg(2-minY:img1NumRows-minY+1, 2-minX:img1NumColumns-minX+1,:) = img1;
 for i = 1:outputNumRows
     for j = 1:outputNumColumns
         % indices already filled with value, not process
-        if outImg(i,j) ~= 0
+        if ~isnan(outImg(i,j))
             continue
         end
         
@@ -69,10 +70,14 @@ for i = 1:outputNumRows
         if 1 <= img2RowIndex && img2RowIndex <= numRows && ...
            1 <= img2ColumnIndex && img2ColumnIndex <= numColumns
             
-            outImg(i,j,:) = sampleBilinear(img2, 1, img2RowIndex, img2ColumnIndex);
+            outImg(i,j,:) = double(sampleBilinear(img2, 1, img2RowIndex, img2ColumnIndex))/double(intmax(class(img2)));
+        else
+            outImg(i,j,:) = 0;
         end
     end
 end
+
+outImg = uint8(outImg * double(intmax('uint8')));
 
 figure;
 imagesc(outImg);
