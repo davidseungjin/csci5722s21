@@ -18,7 +18,8 @@ main_menu = @() menu(...
     'Load Images', ...
     'Select Points', ...
     'Load Points', ...
-    'Compute Homography' ...
+    'Compute Homography', ...
+    'Task4: warp img2 into img1' ...
 );
 
 % Display a menu and get a choice
@@ -54,7 +55,23 @@ while choice ~= 1
         case 5
             % Compute homography matrix
             H = computeH(points);
-            generateBlankOutputImg(image1, image2, H); 
+            generateBlankOutputImg(image1, image2, H);
+        case 6
+            % Task 4 img2 in img1.
+            % will choose corners of img2 automatically.
+            % select four points of img1.
+            % then make img.
+            image_choice = menu('Choose image pair', 'Task4');
+            switch image_choice
+               case 1
+                   filename1 = 'task4_img1.jpg';
+                   filename2 = 'task4_img2.jpg';
+            end
+            image1 = imread(filename1);
+            image2 = imread(filename2);
+            
+            points = setFrame(image1, image2);
+            HWarp(points, image1, image2);
             
     end
     
