@@ -41,7 +41,7 @@ outImg = zeros(outputNumRows, outputNumColumns, 3, class(img1));
 % them to ensure they end up in the correct position on the outImg!
 % Also need to figure out where to position img1
 
-outImg(2-minY:img1NumRows-minY+1, 2-minX:img1NumColumns-minX+1,:) = img1
+outImg(2-minY:img1NumRows-minY+1, 2-minX:img1NumColumns-minX+1,:) = img1;
 
 
 
