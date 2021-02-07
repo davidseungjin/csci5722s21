@@ -3,7 +3,7 @@
 % Assignment #: 1
 % Instructor: Fleming
 
-function [points] = getPoints(img1, img2)
+function [points] = setFrame(img1, img2)
 
 NUM_POINTS = 4;
 

@@ -5,7 +5,7 @@
 
 function [homographyMatrix] = computeH(points)
 
-EPOCHS = 20;
+EPOCHS = 5;
 
 minimumError = 10000000000;
 currentH = zeros(3, 3);

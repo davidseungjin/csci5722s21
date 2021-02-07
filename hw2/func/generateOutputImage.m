@@ -3,7 +3,7 @@
 % Assignment #: 1
 % Instructor: Fleming
 
-function [outImg] = generateBlankOutputImg(img1, img2, H)
+function [outImg] = generateOutputImage(img1, img2, H)
 
 
 [numRows, numColumns, ~] = size(img2);
@@ -78,9 +78,5 @@ for i = 1:outputNumRows
 end
 
 outImg = uint8(outImg * double(intmax('uint8')));
-
-figure;
-imagesc(outImg);
-
 
 end

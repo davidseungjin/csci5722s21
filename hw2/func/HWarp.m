@@ -3,7 +3,7 @@
 % Assignment #: 1
 % Instructor: Fleming
 
-function [outputimg] = HWarp(points, img1, img2)
+function [outImg] = HWarp(points, img1, img2)
 % img2 into img1.
 
 currentH = zeros(3, 3);
@@ -45,9 +45,6 @@ for i = 1:img1NumRows
         end
     end
 end
-
-figure;
-imagesc(outImg);
 
 end
 
