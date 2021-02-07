@@ -5,27 +5,32 @@
 
 function [outImg] = generateOutputImage(img1, img2, H)
 
-
-[numRows, numColumns, ~] = size(img2);
+% Map each of the corners of img2 into img1's coordinate space.
+[img2NumRows, img2NumColumns, ~] = size(img2);
 
 img2TopLeftCornerPos = H * [1; 1; 1];
 img2TopLeftCornerPos = img2TopLeftCornerPos / img2TopLeftCornerPos(3);
 
-img2TopRightCornerPos = H * [numColumns; 1; 1];
+img2TopRightCornerPos = H * [img2NumColumns; 1; 1];
 img2TopRightCornerPos = img2TopRightCornerPos / img2TopRightCornerPos(3);
 
-img2BottomLeftCornerPos = H * [1; numRows; 1];
+img2BottomLeftCornerPos = H * [1; img2NumRows; 1];
 img2BottomLeftCornerPos = img2BottomLeftCornerPos / img2BottomLeftCornerPos(3);
 
-img2BottomRightCornerPos = H * [numColumns; numRows; 1];
+img2BottomRightCornerPos = H * [img2NumColumns; img2NumRows; 1];
 img2BottomRightCornerPos = img2BottomRightCornerPos / img2BottomRightCornerPos(3);
 
+% Grab the dimensions of img1
 [img1NumRows, img1NumColumns, ~] = size(img1);
 
+% Find the minimum and maximum X coordinates in img1's coordinate space with
+% both img1 and img2, so we know what to set the dimensions in the output
+% image.
 extremitiesX = [img2TopLeftCornerPos(1) img2TopRightCornerPos(1) img2BottomLeftCornerPos(1) img2BottomRightCornerPos(1) img1NumColumns 1];
 minX = floor(min(extremitiesX));
 maxX = ceil(max(extremitiesX));
 
+% Same as above, but for the Y coordinates.
 extremitiesY = [img2TopLeftCornerPos(2) img2TopRightCornerPos(2) img2BottomLeftCornerPos(2) img2BottomRightCornerPos(2) img1NumRows 1];
 minY = floor(min(extremitiesY));
 maxY = ceil(max(extremitiesY));
@@ -67,8 +72,8 @@ for i = 1:outputNumRows
         % changed to floor instead of round to fill more indices.
         img2RowIndex = floor(img2Pos(2));
         img2ColumnIndex = floor(img2Pos(1));
-        if 1 <= img2RowIndex && img2RowIndex <= numRows && ...
-           1 <= img2ColumnIndex && img2ColumnIndex <= numColumns
+        if 1 <= img2RowIndex && img2RowIndex <= img2NumRows && ...
+           1 <= img2ColumnIndex && img2ColumnIndex <= img2NumColumns
             
             outImg(i,j,:) = double(sampleBilinear(img2, 1, img2RowIndex, img2ColumnIndex))/double(intmax(class(img2)));
         else
