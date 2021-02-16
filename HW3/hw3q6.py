@@ -7,7 +7,7 @@ import cv2
 # # Q6 A
 
 # %% [code]
-image = cv2.imread('chess.jpg')
+image = cv2.imread('chess2.jpg')
 image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
 
 # Original Img
@@ -91,8 +91,8 @@ plt.show()
 # Harris corner detector parameters
 neighbor_size = 2
 aperture = 3
-k_value = 0.1
-threshold = 0.1
+k_value = 0.04
+threshold = 0.01
 
 dest_original = cv2.cornerHarris(image_gray,neighbor_size,aperture,k_value)
 dest_rotation = cv2.cornerHarris(rotation_img_gray,neighbor_size,aperture,k_value)
@@ -212,8 +212,8 @@ sharpened_2_img_gray = np.float32(sharpened_2_img_gray)
 # Harris corner detector parameters
 neighbor_size = 2
 aperture = 3
-k_value = 0.1
-threshold = 0.1
+k_value = 0.04
+threshold = 0.01
 
 dest_brighter = cv2.cornerHarris(brighter_image_gray,neighbor_size,aperture,k_value)
 dest_darker = cv2.cornerHarris(darker_img_gray,neighbor_size,aperture,k_value)
