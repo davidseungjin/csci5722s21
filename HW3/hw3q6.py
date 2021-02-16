@@ -7,7 +7,7 @@ import cv2
 # # Q6 A
 
 # %% [code]
-image = cv2.imread('../input/chesss/chess.jpg')
+image = cv2.imread('chess.jpg')
 image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
 
 # Original Img
@@ -323,10 +323,32 @@ plt.show()
 
 neighbor_size = 2
 aperture = 3
-k_value = 0.1
+k_value = 0.04
 threshold = 0.1
 
-def gray_harris(filename, neighbor_size, aperture, k_value, threshold):
+def count_invalid(corners):
+    from math import sqrt
+    expected_corners = [ \
+        [33, 33], \
+        [33, 66], \
+        [66, 33], \
+        [66, 66] \
+    ]
+    num_expected = len(expected_corners)
+    allowance = 2 # Allow corner to be within 2 units of the expected
+    i = 0
+    valid = 0
+    while i < len(corners):
+        corner = corners[i]
+        for expected in expected_corners:
+            if sqrt((expected[0]-corner[0])**2+(expected[1]-corner[1])**2) < allowance: # We have a match
+                valid += 1
+                expected_corners.remove(expected)
+                break
+        i += 1
+    return max(num_expected, len(corners)) - valid
+
+def gray_harris(filename, sigma, neighbor_size, aperture, k_value, threshold):
     # Making images grayscale (Harris corner detector uses gray colored image)
     img_gray = cv2.cvtColor(filename, cv2.COLOR_RGB2GRAY)
     img_gray = np.float32(img_gray)
@@ -342,13 +364,39 @@ def gray_harris(filename, neighbor_size, aperture, k_value, threshold):
 
     # Reverting back to the original image, 
     # with optimal threshold value 
-    temp[dest_img> threshold * dest_img.max()]=[255, 0, 0]
+    #temp[dest_img> threshold * dest_img.max()]=[255, 0, 0]
+
+    # Threshold the image and convert to uint8
+    ret, dst = cv2.threshold(dest_img,threshold*dest_img.max(),255,0)
+    dst = np.uint8(dst)
+
+    # Find centroids of detected corner areas
+    ret, labels, stats, centroids = cv2.connectedComponentsWithStats(dst)
+
+    # Filter out centroids that have extremely high areas because they aren't relevant to corners
+    relevant_centroids = []
+    for centroid,stat in zip(centroids, stats):
+        if stat[4] < 100: # Setting the threshold for area of corner to be 100 since most corners are closer to 10-20 pixels in area at most
+            relevant_centroids.append(centroid)
+    centroids = np.asarray(relevant_centroids)
+
+    # Find corners based on additional search criteria
+    criteria = (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 100, 0.001)
+    corners = cv2.cornerSubPix(img_gray,np.float32(centroids),(1,1),(-1,-1),criteria)
+
+    # Set corners in image to be red
+    res = np.hstack((centroids,corners))
+    res = np.int0(res)
+    temp[res[:,1],res[:,0]]=[255,0,0]
+
+    print("Number of Missing / Incorrectly Detected Corners (sigma=" + str(sigma) + "): " + str(count_invalid(corners)))
+
     return temp
     
-img_C_h = gray_harris(C_img, neighbor_size, aperture, k_value, threshold)
-img_C_g1_h = gray_harris(C_img_g1, neighbor_size, aperture, k_value, threshold)
-img_C_g2_h = gray_harris(C_img_g2, neighbor_size, aperture, k_value, threshold)
-img_C_g3_h = gray_harris(C_img_g3, neighbor_size, aperture, k_value, threshold)
+img_C_h = gray_harris(C_img, 0, neighbor_size, aperture, k_value, threshold)
+img_C_g1_h = gray_harris(C_img_g1, 0.1, neighbor_size, aperture, k_value, threshold)
+img_C_g2_h = gray_harris(C_img_g2, 0.5, neighbor_size, aperture, k_value, threshold)
+img_C_g3_h = gray_harris(C_img_g3, 1, neighbor_size, aperture, k_value, threshold)
 
 # Plotting preparation
 plt.figure(figsize=(20, 20))
@@ -370,3 +418,5 @@ plt.imshow(img_C_g3_h)
 
 
 plt.show()
+
+# %%
