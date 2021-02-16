@@ -348,6 +348,26 @@ def count_invalid(corners):
         i += 1
     return max(num_expected, len(corners)) - valid
 
+def rms(corners):
+    from math import sqrt
+    expected_corners = [ \
+        [33, 33], \
+        [33, 66], \
+        [66, 33], \
+        [66, 66] \
+    ]
+    sum = 0
+    for corner in corners:
+        # Find nearest expected corner
+        min_distance = 1000000000000000000
+        for expected in expected_corners:
+            distance = (expected[0]-corner[0])**2+(expected[1]-corner[1])**2
+            min_distance = min(min_distance, distance)
+        sum += min_distance
+    return sqrt(sum / len(expected_corners))
+
+sigma_values = []
+rms_values = []
 def gray_harris(filename, sigma, neighbor_size, aperture, k_value, threshold):
     # Making images grayscale (Harris corner detector uses gray colored image)
     img_gray = cv2.cvtColor(filename, cv2.COLOR_RGB2GRAY)
@@ -390,6 +410,8 @@ def gray_harris(filename, sigma, neighbor_size, aperture, k_value, threshold):
     temp[res[:,1],res[:,0]]=[255,0,0]
 
     print("Number of Missing / Incorrectly Detected Corners (sigma=" + str(sigma) + "): " + str(count_invalid(corners)))
+    rms_values.append(rms(corners))
+    sigma_values.append(sigma)
 
     return temp
     
@@ -417,6 +439,13 @@ plt.title("Original Black and white + gaussian noise(sigma=1)")
 plt.imshow(img_C_g3_h)
 
 
+plt.show()
+
+# Sigma vs. RMS
+plt.plot(sigma_values, rms_values)
+plt.xlabel('sigma', fontsize=12)
+plt.ylabel('RMS', fontsize=12)
+plt.title("Sigma vs. RMS")
 plt.show()
 
 # %%
