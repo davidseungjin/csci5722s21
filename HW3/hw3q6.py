@@ -1,3 +1,10 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Names: Alec Bell, David Lee
+% Course #: CSCI 5722
+% Assignment #: 3
+% Instructor: Fleming
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 # %% [code]
 import numpy as np
 import matplotlib.pyplot as plt
