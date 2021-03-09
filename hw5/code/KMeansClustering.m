@@ -39,18 +39,11 @@ function idx = KMeansClustering(X, k, visualize2D, centers)
     % contain the center of a cluster, so that centers(c, :) is the center
     % of the cth cluster.
     if ~exist('centers', 'var')
-        centers = zeros(k, n);
-        %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-        %                                                                     %
-        %                            YOUR CODE HERE                           %
-        %                                                                     %
-        %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-        
-        %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-        %                                                                     %
-        %                            END YOUR CODE                            %
-        %                                                                     %
-        %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+        %centers = zeros(k, n);
+        % Select k unique random values in the interval [1,n] in order to
+        % select random rows from X to initialize the centers.
+        random_indices = randperm(m, k);
+        centers = X(random_indices,:);
     end
     
     % The assignments of points to clusters. If idx(i) == c then the point
@@ -71,17 +64,19 @@ function idx = KMeansClustering(X, k, visualize2D, centers)
         
         % Compute distances from each point to the centers and assign each
         % point to the closest cluster.
-        %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-        %                                                                     %
-        %                            YOUR CODE HERE                           %
-        %                                                                     %
-        %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-        
-        %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-        %                                                                     %
-        %                            END YOUR CODE                            %
-        %                                                                     %
-        %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+        for i = 1:m
+            point = X(i,:);
+            min_dist = Inf;
+            index = -1;
+            for j = 1:k
+                dist = pdist2(point, centers(j,:));
+                if dist < min_dist
+                    min_dist = dist;
+                    index = j;
+                end
+            end
+            idx(i) = index;
+        end
         
         % Break if cluster assignments didn't change
         if idx == old_idx
@@ -89,17 +84,9 @@ function idx = KMeansClustering(X, k, visualize2D, centers)
         end
 
         % Update the cluster centers
-        %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-        %                                                                     %
-        %                            YOUR CODE HERE                           %
-        %                                                                     %
-        %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-        
-        %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-        %                                                                     %
-        %                            END YOUR CODE                            %
-        %                                                                     %
-        %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+        for i = 1:k
+            centers(i,:) = mean(X(idx==i,:), 1);
+        end
         
         % Display the points in the 2D case.
         if n == 2 && visualize2D

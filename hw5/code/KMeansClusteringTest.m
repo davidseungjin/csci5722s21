@@ -13,7 +13,7 @@ function KMeansClusteringTest(visualize)
 	if visualize
 		disp('Hit Enter to run the next iteration')
 	end
-    load('../test_data/KMeansClusteringTest.mat');
+    load('test_data/KMeansClusteringTest.mat');
     my_idx = KMeansClustering(X, num_clusters, visualize, centers);
     
     if all(my_idx == idx)
