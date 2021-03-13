@@ -101,19 +101,8 @@ function idx = HAClustering(X, k, visualize2D)
         
         % Find the pair of clusters that are closest together.
         % Set i and j to be the indices of the nearest pair of clusters.
-        i = 0;
-        j = 0;
-        %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-        %                                                                     %
-        %                            YOUR CODE HERE                           %
-        %                                                                     %
-        %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-        
-        %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-        %                                                                     %
-        %                            END YOUR CODE                            %
-        %                                                                     %
-        %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+        min_dist = min(min(dists));
+        [i,j] = find(dists==min_dist, 1);
         
         % Make sure that i < j
         if i > j        
@@ -129,64 +118,32 @@ function idx = HAClustering(X, k, visualize2D)
         % ensures that the distance from cluster j to any other cluster is
         % +Inf.
         
-        % Assign all points currently in cluster j to cluster i.
-        %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-        %                                                                     %
-        %                            YOUR CODE HERE                           %
-        %                                                                     %
-        %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%      
-        
-        %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-        %                                                                     %
-        %                            END YOUR CODE                            %
-        %                                                                     %
-        %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+        % Assign all points currently in cluster j to cluster i.    
+        idx(idx==j) = i;
         
         % Compute the new centroid for clusters i and set the centroid of
         % cluster j to +Inf.
         % HINT: You should be able to compute both updated cluster
         % centroids in O(1) time.
-        %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-        %                                                                     %
-        %                            YOUR CODE HERE                           %
-        %                                                                     %
-        %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-        
-        %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-        %                                                                     %
-        %                            END YOUR CODE                            %
-        %                                                                     %
-        %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+        centroids(j,:) = Inf(1, n);
+        centroids(i,:) = mean(X(idx==i,:), 1);
         
         % Update the size of clusters i and j.
-        %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-        %                                                                     %
-        %                            YOUR CODE HERE                           %
-        %                                                                     %
-        %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-        
-        %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-        %                                                                     %
-        %                            END YOUR CODE                            %
-        %                                                                     %
-        %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+        cluster_sizes(j) = 0;
+        cluster_sizes(i) = size(idx(idx==i), 1);
                      
         % Update the dists array. In particular, we need to update the
         % distances from clusters i and j to all other clusters.
         % Hint: You might find the pdist2 function useful.
         % Hint: Remember that the diagonal of dists must be +Inf.
-        %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-        %                                                                     %
-        %                            YOUR CODE HERE                           %
-        %                                                                     %
-        %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+        for a=1:m
+            dists(i,a) = pdist2(centroids(i,:), centroids(a,:));
+            dists(a,i) = pdist2(centroids(i,:), centroids(a,:));
+        end
+        dists(i,i) = Inf;
         
-        %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-        %                                                                     %
-        %                            END YOUR CODE                            %
-        %                                                                     %
-        %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-        
+        dists(j,:) = Inf(1,m);
+        dists(:,j) = Inf(1,m);
         
         % If everything worked correctly then we have one less cluster.
         num_clusters = num_clusters - 1;
