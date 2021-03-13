@@ -2,7 +2,7 @@ function ComputePositionColorFeaturesTest()
 % Tests the implementation of ComputePositionColorFeatures by comparing the
 % current implementation with the output from the reference implementation.
 
-    load('../test_data/ComputePositionColorFeaturesTest.mat');
+    load('test_data/ComputePositionColorFeaturesTest.mat');
     
     your_features = ComputePositionColorFeatures(img);
     if all(your_features == features)

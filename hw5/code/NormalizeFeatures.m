@@ -13,12 +13,11 @@ function featuresNorm = NormalizeFeatures(features)
 
     features = double(features);
     featuresNorm = features;
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%                                                                              %
-%                                YOUR CODE HERE:                               %
-%                                                                              %
-%                HINT: The functions mean and std may be useful                %
-%                                                                              %
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    for i=1:size(featuresNorm,3)
+        matrix = featuresNorm(:,:,i);
+        vector = reshape(transpose(matrix),[],1);
+        avg = mean(vector);
+        var = std(vector);
+        featuresNorm(:,:,i) = (featuresNorm(:,:,i) - avg) / var;
+    end
 end

@@ -3,7 +3,7 @@ function NormalizeFeaturesTest()
 % on a testing dataset with the output of our reference implementation on
 % the same datasets.
 
-    load('../test_data/NormalizeFeaturesTest.mat');
+    load('test_data/NormalizeFeaturesTest.mat');
     featuresNormYours = NormalizeFeatures(features);
     same = sum(abs((featuresNorm(:) - featuresNormYours(:)))) < 1e-6;
     
