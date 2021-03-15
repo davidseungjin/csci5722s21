@@ -10,7 +10,7 @@ clusteringMethod = 'kmeans';
 % Choose the feature function that will be used. The @ syntax creates a
 % function handle; this allows us to pass a function as an argument to
 % another function.
-featureFn = @ComputeColorFeatures;
+featureFn = @ComputeFeatures;
 
 % Whether or not to normalize features before clustering.
 normalizeFeatures = true;
