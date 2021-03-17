@@ -30,15 +30,26 @@ function features = ComputeFeatures(img)
     % in direction (i.e. a flat white wall).
     gradients = imgradient(gs, 'prewitt');
     
-    for i=1:height
-        for j=1:width
-            features(i,j,1) = img(i,j,1);
-            features(i,j,2) = img(i,j,2);
-            features(i,j,3) = img(i,j,3);
-            features(i,j,4) = j;
-            features(i,j,5) = i;
-            features(i,j,6) = edges(i,j);
-            %features(i,j,7) = gradients(i,j);
-        end
-    end
+    % Vector implementation.
+    features(:,:,1:3) = img;
+    colVal = (1:width);
+    features(:,:,4) = repmat(colVal, height, 1);
+    
+    rowVal = (1:height)';
+    features(:,:,5) = repmat(rowVal, 1, width);
+    
+    features(:,:,6) = edges;
+    
+%     
+%     for i=1:height
+%         for j=1:width
+%             features(i,j,1) = img(i,j,1);
+%             features(i,j,2) = img(i,j,2);
+%             features(i,j,3) = img(i,j,3);
+%             features(i,j,4) = j;
+%             features(i,j,5) = i;
+%             features(i,j,6) = edges(i,j);
+%             %features(i,j,7) = gradients(i,j);
+%         end
+%     end
 end
