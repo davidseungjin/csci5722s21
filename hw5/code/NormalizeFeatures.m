@@ -12,12 +12,19 @@ function featuresNorm = NormalizeFeatures(features)
 %                has been normalized to have zero mean and unit variance.
 
     features = double(features);
-    featuresNorm = features;
-    for i=1:size(featuresNorm,3)
-        matrix = featuresNorm(:,:,i);
-        vector = reshape(transpose(matrix),[],1);
-        avg = mean(vector);
-        var = std(vector);
-        featuresNorm(:,:,i) = (featuresNorm(:,:,i) - avg) / var;
-    end
+
+% Suggestion: Vectorization
+% Finding mean/std values at each features (each page)
+    meanVector = mean(features, [1 2]);
+    stdVector = std(features, 0, [1 2]);
+    featuresNorm = (features - meanVector) ./ stdVector;
+
+%     featuresNorm = features;        
+%     for i=1:size(featuresNorm,3)
+%         matrix = featuresNorm(:,:,i);
+%         vector = reshape(transpose(matrix),[],1);
+%         avg = mean(vector);
+%         var = std(vector);
+%         featuresNorm(:,:,i) = (featuresNorm(:,:,i) - avg) / var;
+%     end
 end
