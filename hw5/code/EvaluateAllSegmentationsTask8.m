@@ -12,7 +12,7 @@ normalizeFeatures = [true, false];
 featureFnName = ["ComputeColorFeatures", ...
     "ComputePositionColorFeatures", "ComputeFeatures"];
 Resize = [0.1, 0.3];
-numClusters = [2, 6, 10];
+numClusters = [2, 3, 4];
 
 % Since the images are different sizes, we specify a maximum number of
 % pixels that we want to cluster and then use this to determine the resize
@@ -33,18 +33,13 @@ Re_Size = [];
 Mean_Accuracy = [];
 
 for nc = 1:length(numClusters)
-    nc
     for c = 1:length(clusteringMethod)
-        c
         for n = 1:length(normalizeFeatures)
-            n
             for f = 1:length(featureFnName)
-                f
                 % Determine the amount of resize required for this image.
                 for r = 1:length(Resize)
-                    r
                     for i = 1:length(imageNames)
-                        i
+                        [nc c n f r i]
                         img = imread(['../' imageNames{i}]);
                         maskGt = imread(['../' gtNames{i}]);
 
@@ -57,19 +52,24 @@ for nc = 1:length(numClusters)
                         end
 
                         % Compute a segmentation for this image
-                        segments = ComputeSegmentation(img, numClusters(nc), ...
+                        % Some array index error happens. So apply try
+                        % catch
+                        try
+                            segments = ComputeSegmentation(img, numClusters(nc), ...
                             clusteringMethod(c), str2func(featureFnName(f)), ...
                             normalizeFeatures(n), Resize(r));
-
-                        % Evaluate the segmentation.
-                        if chooseSegmentsManually
-                            mask = ChooseSegments(segments);
-                            accuracy = EvaluateSegmentation(maskGt, mask);
-                        else
-                            accuracy = EvaluateSegmentation(maskGt, segments);
+                            % Evaluate the segmentation.
+                            if chooseSegmentsManually
+                                mask = ChooseSegments(segments);
+                                accuracy = EvaluateSegmentation(maskGt, mask);
+                            else
+                                accuracy = EvaluateSegmentation(maskGt, segments);
+                            end
+                            fprintf('Accuracy for %s is %.4f\n', imageNames{i}, accuracy);
+                            meanAccuracy = meanAccuracy + accuracy;
+                        catch
+                            continue
                         end
-                        fprintf('Accuracy for %s is %.4f\n', imageNames{i}, accuracy);
-                        meanAccuracy = meanAccuracy + accuracy;
                     end
                     meanAccuracy = meanAccuracy / length(imageNames);
                     fprintf('%s\t%d\t%s\t%d\t%.2f\t%.4f\n', ...
