@@ -11,6 +11,8 @@ clusteringMethod = ["kmeans", "hac"];
 normalizeFeatures = [true, false];
 featureFnName = ["ComputeColorFeatures", ...
     "ComputePositionColorFeatures", "ComputeFeatures"];
+Resize = [0.1, 0.3];
+numClusters = [2, 6, 10];
 
 % Since the images are different sizes, we specify a maximum number of
 % pixels that we want to cluster and then use this to determine the resize
@@ -30,13 +32,19 @@ Number_Of_Cluster = [];
 Re_Size = [];
 Mean_Accuracy = [];
 
-for numClusters = 2:4:10
+for nc = 1:length(numClusters)
+    nc
     for c = 1:length(clusteringMethod)
+        c
         for n = 1:length(normalizeFeatures)
+            n
             for f = 1:length(featureFnName)
+                f
                 % Determine the amount of resize required for this image.
-                for resize = 0.2:0.4:1.0
+                for r = 1:length(Resize)
+                    r
                     for i = 1:length(imageNames)
+                        i
                         img = imread(['../' imageNames{i}]);
                         maskGt = imread(['../' gtNames{i}]);
 
@@ -49,9 +57,9 @@ for numClusters = 2:4:10
                         end
 
                         % Compute a segmentation for this image
-                        segments = ComputeSegmentation(img, numClusters, ...
+                        segments = ComputeSegmentation(img, numClusters(nc), ...
                             clusteringMethod(c), str2func(featureFnName(f)), ...
-                            normalizeFeatures(n), resize);
+                            normalizeFeatures(n), Resize(r));
 
                         % Evaluate the segmentation.
                         if chooseSegmentsManually
@@ -64,13 +72,15 @@ for numClusters = 2:4:10
                         meanAccuracy = meanAccuracy + accuracy;
                     end
                     meanAccuracy = meanAccuracy / length(imageNames);
-                    fprintf('The mean accuracy for all images is %.4f\n', ...
-                        meanAccuracy);
-                    Feature_Transform = [Feature_Transform; featureFn(f)];
+                    fprintf('%s\t%d\t%s\t%d\t%.2f\t%.4f\n', ...
+                        featureFnName(f), normalizeFeatures(n), ...
+                        clusteringMethod(c), numClusters(nc), ...
+                        Resize(r), meanAccuracy);
+                    Feature_Transform = [Feature_Transform; featureFnName(f)];
                     Feature_Normalization = [Feature_Normalization; normalizeFeatures(n)];
                     Clustering_Method = [Clustering_Method; clusteringMethod(c)];
-                    Number_Of_Cluster = [Number_Of_Cluster; numClusters];
-                    Re_Size = [Re_Size; resize];
+                    Number_Of_Cluster = [Number_Of_Cluster; numClusters(nc)];
+                    Re_Size = [Re_Size; Resize(r)];
                     Mean_Accuracy = [Mean_Accuracy; meanAccuracy];
                 end
             end
