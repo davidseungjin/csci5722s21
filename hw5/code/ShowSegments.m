@@ -1,10 +1,12 @@
-function ShowSegments(img, segments)
+function ShowSegments(img, segments, filepathSegment)
+
 % Creates a figure showing the individual segments of a segmentation.
 %
 % INPUTS
 % img - The image for which a segmentation has been computed.
 % segments - A struct array containing a segmentation for img. The format
 %            of the struct array is described in ComputeSegmentation.m.
+    
 
     % Pick the width and height of the subplot grid automatically to make
     % it as square as possible.
@@ -23,5 +25,7 @@ function ShowSegments(img, segments)
         imshow(segments(i).img);
     end
     subplot(gridHeight, gridWidth, 1);
+    
+    imwrite(getframe(gcf).cdata, filepathSegment);
     
 end

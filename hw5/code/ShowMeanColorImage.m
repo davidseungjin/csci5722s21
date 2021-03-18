@@ -1,4 +1,4 @@
-function ShowMeanColorImage(img, segments)
+function ShowMeanColorImage(img, segments, filepathMean)
 % Given a segmentation of an image, creates a figure showing the original
 % image and a recolored version of the image where the pixels of each
 % segment are replaced by the mean color of all pixels in that segment.
@@ -20,5 +20,8 @@ function ShowMeanColorImage(img, segments)
     % Show the mean color image.
     subplot(1, 2, 2);
     imshow(meanColorImg);
+    
+    
+    imwrite(getframe(gcf).cdata, filepathMean);
 
 end
