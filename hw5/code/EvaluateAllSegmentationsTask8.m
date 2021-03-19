@@ -7,12 +7,11 @@
 load('../cats.mat');
 
 % Set the parameters for segmentation.
-clusteringMethod = ["kmeans", "hac"];
+clusteringMethod = ["hac", "kmeans"];
 normalizeFeatures = [true, false];
-featureFnName = ["ComputeColorFeatures", ...
-    "ComputePositionColorFeatures", "ComputeFeatures"];
+featureFnName = ["ComputePositionColorFeatures", "ComputeFeatures"];
 Resize = [0.1, 0.3];
-numClusters = [2, 3, 4];
+numClusters = [3, 4];
 
 % Since the images are different sizes, we specify a maximum number of
 % pixels that we want to cluster and then use this to determine the resize
@@ -38,7 +37,7 @@ for nc = 1:length(numClusters)
             for f = 1:length(featureFnName)
                 % Determine the amount of resize required for this image.
                 for r = 1:length(Resize)
-                    for i = 1:length(imageNames)
+                    for i = 1:3
                         [nc c n f r i]
                         img = imread(['../' imageNames{i}]);
                         maskGt = imread(['../' gtNames{i}]);
@@ -71,7 +70,8 @@ for nc = 1:length(numClusters)
                             continue
                         end
                     end
-                    meanAccuracy = meanAccuracy / length(imageNames);
+%                     meanAccuracy = meanAccuracy / length(imageNames);
+                    meanAccuracy = meanAccuracy / 3;
                     fprintf('%s\t%d\t%s\t%d\t%.2f\t%.4f\n', ...
                         featureFnName(f), normalizeFeatures(n), ...
                         clusteringMethod(c), numClusters(nc), ...
