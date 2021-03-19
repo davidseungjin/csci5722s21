@@ -32,7 +32,8 @@ Re_Size = [];
 Mean_Accuracy = [];
 
 for nc = 1:length(numClusters)
-    for c = 1:length(clusteringMethod)
+    for c = 1
+%     for c = 1:length(clusteringMethod)
         for n = 1:length(normalizeFeatures)
             for f = 1:length(featureFnName)
                 % Determine the amount of resize required for this image.
