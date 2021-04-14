@@ -10,7 +10,7 @@ import pandas as pd
 def opening_files(root) -> tuple:
     # Tkinter object creation to handle files selection, directory selection.
     testFolderForSorting = '/Volumes/extSSD/02_Classes/20_CSCI 5722 Computer Vision/HWs/csci5722s21/finalproject/photosorter_images'
-    testFolderForfiles = './'
+    testFolderForfiles = '/Volumes/extSSD/02_Classes/20_CSCI 5722 Computer Vision/HWs/csci5722s21/finalproject/photosorter_images'
 
     # When file(s) opening
     files = fd.askopenfilenames(initialdir = testFolderForfiles, title='Choose a file')
@@ -127,9 +127,9 @@ def nms_result(outs, img, myfile) -> None:
             if myfile in mydict[classes[class_ids[i]]].keys():
                 mydict[classes[class_ids[i]]][myfile] += 1
             else:
-                mydict[classes[class_ids[i]]][myfile] =0
+                mydict[classes[class_ids[i]]][myfile] =1
         else:
-            mydict[classes[class_ids[i]]] = {myfile:0}
+            mydict[classes[class_ids[i]]] = {myfile:1}
     '''
     This below is for visualizing into img and show. For Final project, it's not the scope.
     '''
@@ -179,4 +179,8 @@ if __name__ == '__main__':
         outs = output(net, blob, outputlayers)
         nms_result(outs, img, myfile)
 
-    print('mydict in main', mydict)
+    # Check result
+    for k1, v1 in mydict.items():
+        for k2, v2 in v1.items():
+            print("Item {}: File {} contains {}".format(k1, k2, v2))
+    
