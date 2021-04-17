@@ -9,15 +9,14 @@ import numpy as np
 class finalProject:
     def __init__(self):
         # Variables
-        self.filesToBeProcessed = []            # List of string
-        self.sourceDirectory = ""               # String
+        self.filesToBeProcessed = []                                # File(s) selected from file or folder open
+        self.sourceDirectory = ""                                   # Location of source folder. will be used when copying files
         self.initialfolder = "/Volumes/extSSD/02_Classes/20_CSCI 5722 Computer Vision/HWs/csci5722s21/FinalProject/"
-        self.targetobject = ""
-        self.processedDict = {}
-        self.filesAfterProcessed = []
-        self.targetDirectory = ""
-        self.copyprogress = ""
-        
+        self.objectvar = ""                                         # will be assigned in myGUI function
+        self.processedDict = {}                                     # All detection result according to object
+        self.filesAfterProcessed = []                               # Extracted list according to self.objectvar and source images (self.filesToBeProcessed)
+        self.targetDirectory = ""                                   # Folder that we want to store the extracted images
+        self.copyprogress = ""                                      # Any sentence that informs the progress
         
         self.yoloweights = self.initialfolder + "yolo/yolov3.weights"
         self.yolo_cfg = self.initialfolder + "yolo/yolov3_training.cfg"
@@ -25,11 +24,10 @@ class finalProject:
         with open(self.coconames, "r") as f:
             self.classes = [line.strip() for line in f.readlines()]
         
-        self.myCNNnetwork = ""          # will be assigned by the function yolo_initiation
-        # print("self.myCNNnetwork is ", self.myCNNnetwork)
-        self.outputlayers = ""          # will be assigned by the function yolo_initiation
-        self.blob = ""                  # will be assigned by the function yolo_blob(self, img)
-        self.outs = ""                  # will be assigned by the function output
+        self.myCNNnetwork = ""                                      # will be assigned by the function yolo_initiation
+        self.outputlayers = ""                                      # will be assigned by the function yolo_initiation
+        self.blob = ""                                              # will be assigned by the function yolo_blob(self, img)
+        self.outs = ""                                              # will be assigned by the function output
         
         self.myGUI()
 
@@ -58,11 +56,14 @@ class finalProject:
         self.third_frame = tk.LabelFrame(self.root, text = "Step2-2: Detect Objects")
         self.third_frame.pack(fill="both", expand="yes", padx=10, pady=10)
         self.objectvar = tk.StringVar()
-        # self.objectvar = objectvar.get()
+
         tk.Radiobutton(self.third_frame, text="Person", variable = self.objectvar, value = "Person").pack()
         tk.Radiobutton(self.third_frame, text="Car", variable = self.objectvar, value = "Car").pack()
         tk.Radiobutton(self.third_frame, text="Flower", variable = self.objectvar, value = "Flower").pack()
         tk.Radiobutton(self.third_frame, text="Tree", variable = self.objectvar, value = "Tree").pack()
+        tk.Radiobutton(self.third_frame, text="Scene", variable = self.objectvar, value = "Rock").pack()
+        tk.Radiobutton(self.third_frame, text="Scene", variable = self.objectvar, value = "Water").pack()
+        tk.Radiobutton(self.third_frame, text="Scene", variable = self.objectvar, value = "Effel Tower").pack()
         tk.Radiobutton(self.third_frame, text="Scene", variable = self.objectvar, value = "Scene").pack()
         detection = ttk.Button(self.third_frame, text="Execute detection", command= lambda: self.detectionObject()).pack()
 
@@ -87,7 +88,7 @@ class finalProject:
         # Tkinter object creation to handle files selection, directory selection.
         self.filesToBeProcessed = list(fd.askopenfilenames(initialdir = self.initialfolder, title='Choose a file'))
 
-        print("myfiles = ", self.filesToBeProcessed, type(self.filesToBeProcessed))
+        # print("myfiles = ", self.filesToBeProcessed, type(self.filesToBeProcessed))
         
 
     def opening_dir(self) -> list:
@@ -96,19 +97,29 @@ class finalProject:
         self.sourceDirectory = fd.askdirectory(initialdir = self.initialfolder, title = 'Choose a directory')
         self.filesToBeProcessed = [os.path.join(self.sourceDirectory, files) for files in os.listdir(self.sourceDirectory) if os.path.isfile(os.path.join(self.sourceDirectory, files)) ]
 
-        print("dourceDirectory, filesToBeProcessed are", self.sourceDirectory, self.filesToBeProcessed)
-        print("len of files are ", len(self.filesToBeProcessed))
+        # print("dourceDirectory, filesToBeProcessed are", self.sourceDirectory, self.filesToBeProcessed)
+        # print("len of files are ", len(self.filesToBeProcessed))
 
     def nearDuplicate():
         print("NEAR DUPLICATE FUNCTION")
 
     def detectionObject(self) -> list:
-
-        print("detectionObject. detection function start")
+        self.filesAfterProcessed = []
+        # print("detectionObject. detection function start")
         self.detection()
-        print("self.processedDict in function detectionObject\n\n", self.processedDict)
-        print("self.objectvar", self.objectvar.get())
-        print("self.filesAfterProcessed in function detectionObject\n\n", self.filesAfterProcessed)
+        keyword = self.objectvar.get().lower()
+        # print("keyword", keyword)
+        # print("self.processedDict in function detectionObject\n\n", self.processedDict)
+        # print("self.objectvar.get().lower()", keyword)
+        if keyword in self.processedDict.keys():
+            # print("{} is in the processedDict. Let's go further".format(keyword))
+            # print("self.processedDict[keyword]\n\n",self.processedDict[keyword])
+            self.filesAfterProcessed = list(self.processedDict[keyword].keys())
+        else:
+            print("Your query {} is not in the processedDict.".format(keyword))
+                    
+        # print("self.filesAfterProcessed in function detectionObject\n\n", self.filesAfterProcessed, type(self.filesAfterProcessed))
+        
         
 
     def assign_dir(self) -> None:
@@ -121,7 +132,7 @@ class finalProject:
     def copytofolder(self):
         # files = [os.path.split(myfile)[1] for myfile in self.filesAfterProcessed]          # if index 0, then it is the path of file
         # files = [os.path.split(myfile)[1] for myfile in self.filesToBeProcessed]
-        for elem in self.filesToBeProcessed:
+        for elem in self.filesAfterProcessed:
             print("sct, dst ", elem, os.path.join(self.targetDirectory, os.path.split(elem)[1]))
             shutil.copyfile(elem, os.path.join(self.targetDirectory, os.path.split(elem)[1]))
         # self.copyprogress = "Copy completed" <-- How to update text of Label from "" to "Copy completed" OR "Copy started" -> "Copy completed"
@@ -130,15 +141,15 @@ class finalProject:
 
 
     def yolo_initiation(self):
-        print("yolo_initiation function called")
+        # print("yolo_initiation function called")
         # yoloweights = self.yoloweights
         # yolo_cfg = self.yolo_cfg
         self.myCNNnetwork = cv.dnn.readNet(self.yoloweights, self.yolo_cfg)
 
         layer_names = self.myCNNnetwork.getLayerNames()
         self.outputlayers = [layer_names[i[0] - 1] for i in self.myCNNnetwork.getUnconnectedOutLayers()]
-        print("yolo_initiation function finished")
-        print("myCNNnetwork and outputlayers are", self.myCNNnetwork, self.outputlayers)
+        # print("yolo_initiation function finished")
+        # print("myCNNnetwork and outputlayers are", self.myCNNnetwork, self.outputlayers)
 
 
     def loading_img(self, file):
@@ -162,18 +173,20 @@ class finalProject:
     def output(self):
         self.myCNNnetwork.setInput(self.blob)
         self.outs = self.myCNNnetwork.forward(self.outputlayers)
-        print("self.outs in output func is ", self.outs)
+        # print("self.outs in output func is ", self.outs)
 
     def detection(self):
         self.yolo_initiation()
-        print("fileToBeProcessed is ", self.filesToBeProcessed)
+        # print("fileToBeProcessed is ", self.filesToBeProcessed)
         for myfile in self.filesToBeProcessed:
-            # myfile = myfiles[0]
-            print(myfile)
-            img = self.loading_img(myfile)
-            self.yolo_blob(img)
-            self.output()
-            self.nms_result(img, myfile)
+            try:
+                img = self.loading_img(myfile)
+                self.yolo_blob(img)
+                self.output()
+                self.nms_result(img, myfile)
+            except:
+                print("########## Except raised. Maybe Not image files ##########")
+                continue
 
     def nms_result(self, img, myfile) -> None:
         '''
@@ -232,9 +245,9 @@ class finalProject:
             else:
                 self.processedDict[self.classes[class_ids[i]]] = {myfile:1}
         
-        for k1, v1 in self.processedDict.items():
-            for k2, v2 in v1.items():
-                print("Item {}: File {} contains {}".format(k1, k2, v2))
+        # for k1, v1 in self.processedDict.items():
+        #     for k2, v2 in v1.items():
+        #         print("Item {}: File {} contains {}".format(k1, k2, v2))
         
         '''
         This below is for visualizing into img and show. For Final project, it's not the scope.
@@ -256,15 +269,3 @@ if __name__ == '__main__':
     # tkinter object creation
     
     a = finalProject()
-    
-
-    # Declare and initialize sorting result according to query
-    # mydict = dict()
-
-    # Opening files test
-    # myfiles = opening_files(root)
-    # print(myfiles, type(myfiles))
-
-    # Opening dir test
-    # myfiles = opening_dir("/Volumes/extSSD/02_Classes/20_CSCI 5722 Computer Vision/HWs/csci5722s21/FinalProject/")
-    # print(myfiles, type(myfiles))
