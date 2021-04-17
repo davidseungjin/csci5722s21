@@ -18,7 +18,7 @@ class finalProject:
         self.targetDirectory = ""                                   # Folder that we want to store the extracted images
         self.copyprogress = ""                                      # Any sentence that informs the progress
         
-        self.yoloweights = self.initialfolder + "yolo/yolov3.weights"
+        self.yoloweights = self.initialfolder + "yolo/yolov3_training_4000.weights"
         self.yolo_cfg = self.initialfolder + "yolo/yolov3_training.cfg"
         self.coconames = self.initialfolder + "yolo/classes.names"
         with open(self.coconames, "r") as f:
@@ -55,17 +55,18 @@ class finalProject:
 
         self.third_frame = tk.LabelFrame(self.root, text = "Step2-2: Detect Objects")
         self.third_frame.pack(fill="both", expand="yes", padx=10, pady=10)
+        
+        ttk.Button(self.third_frame, text="CNN Processing", command= lambda: self.detection()).pack()
         self.objectvar = tk.StringVar()
-
         tk.Radiobutton(self.third_frame, text="Person", variable = self.objectvar, value = "Person").pack()
         tk.Radiobutton(self.third_frame, text="Car", variable = self.objectvar, value = "Car").pack()
         tk.Radiobutton(self.third_frame, text="Flower", variable = self.objectvar, value = "Flower").pack()
         tk.Radiobutton(self.third_frame, text="Tree", variable = self.objectvar, value = "Tree").pack()
-        tk.Radiobutton(self.third_frame, text="Scene", variable = self.objectvar, value = "Rock").pack()
-        tk.Radiobutton(self.third_frame, text="Scene", variable = self.objectvar, value = "Water").pack()
-        tk.Radiobutton(self.third_frame, text="Scene", variable = self.objectvar, value = "Effel Tower").pack()
+        tk.Radiobutton(self.third_frame, text="Rock", variable = self.objectvar, value = "Rock").pack()
+        tk.Radiobutton(self.third_frame, text="Water", variable = self.objectvar, value = "Water").pack()
+        tk.Radiobutton(self.third_frame, text="Effel Tower", variable = self.objectvar, value = "Effel Tower").pack()
         tk.Radiobutton(self.third_frame, text="Scene", variable = self.objectvar, value = "Scene").pack()
-        detection = ttk.Button(self.third_frame, text="Execute detection", command= lambda: self.detectionObject()).pack()
+        ttk.Button(self.third_frame, text="Extract photo with topic above", command= lambda: self.detectionObject()).pack()
 
         # bottom_frame = tk.Frame(self.root).pack()
         self.fourth_frame = tk.LabelFrame(self.root, text = "Step3: assign a folder to copy the sorted photos")
@@ -106,7 +107,7 @@ class finalProject:
     def detectionObject(self) -> list:
         self.filesAfterProcessed = []
         # print("detectionObject. detection function start")
-        self.detection()
+        # self.detection()
         keyword = self.objectvar.get().lower()
         # print("keyword", keyword)
         # print("self.processedDict in function detectionObject\n\n", self.processedDict)
