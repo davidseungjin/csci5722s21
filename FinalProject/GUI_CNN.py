@@ -109,19 +109,11 @@ class finalProject:
         # print("detectionObject. detection function start")
         # self.detection()
         keyword = self.objectvar.get().lower()
-        # print("keyword", keyword)
-        # print("self.processedDict in function detectionObject\n\n", self.processedDict)
-        # print("self.objectvar.get().lower()", keyword)
         if keyword in self.processedDict.keys():
-            # print("{} is in the processedDict. Let's go further".format(keyword))
-            # print("self.processedDict[keyword]\n\n",self.processedDict[keyword])
             self.filesAfterProcessed = list(self.processedDict[keyword].keys())
         else:
             print("Your query {} is not in the processedDict.".format(keyword))
                     
-        # print("self.filesAfterProcessed in function detectionObject\n\n", self.filesAfterProcessed, type(self.filesAfterProcessed))
-        
-        
 
     def assign_dir(self) -> None:
         # When directory selection.
