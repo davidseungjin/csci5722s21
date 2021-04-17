@@ -163,9 +163,13 @@ if __name__ == '__main__':
     # print(myfiles, type(myfiles))
 
     basepath = "/Volumes/extSSD/02_Classes/20_CSCI 5722 Computer Vision/HWs/csci5722s21/FinalProject/"
-    yoloweights= basepath + "yolo/yolov3.weights"
-    yolo_cfg = basepath + "yolo/yolov3.cfg"
-    coconames = basepath + "yolo/coco.names"
+    yoloweights = basepath + "yolo/yolov3.weights"
+    yolo_cfg = basepath + "yolo/yolov3_training.cfg"
+    coconames = basepath + "yolo/classes.names"
+
+    # yoloweights= basepath + "yolo/yolov3.weights"
+    # yolo_cfg = basepath + "yolo/yolov3.cfg"
+    # coconames = basepath + "yolo/coco.names"
     with open(coconames, "r") as f:
         classes = [line.strip() for line in f.readlines()]
 
