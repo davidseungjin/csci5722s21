@@ -34,7 +34,7 @@ class finalProject:
     def myGUI(self):
         # Tkinter Part
         self.root = tk.Tk()
-        self.root.title("CSCI5722 FinalProject")
+        self.root.title("CSCI5722: Preferred and Deluxe")
 
         self.overview = tk.LabelFrame(self.root, text = "Instruction")
         self.overview.pack(fill="both", expand="yes", padx=10, pady=10)
@@ -47,15 +47,15 @@ class finalProject:
         openingfiles = ttk.Button(self.first_frame, text="Files", command= lambda: self.opening_files()).pack()
         openingfolder = ttk.Button(self.first_frame, text="Folder", command= lambda: self.opening_dir()).pack()
 
+        # self.second_frame = tk.LabelFrame(self.root, text = "Step2-1: Near-Duplicate")
+        # self.second_frame.pack(fill="both", expand="yes", padx=10, pady=10)
+        # ttk.Button(self.second_frame, text="Detect: Near-Duplicate", command = lambda: self.nearDuplicate()).pack()
 
-        self.second_frame = tk.LabelFrame(self.root, text = "Step2-1: Near-Duplicate")
-        self.second_frame.pack(fill="both", expand="yes", padx=10, pady=10)
-        ttk.Button(self.second_frame, text="Detect: Near-Duplicate", command = lambda: self.nearDuplicate()).pack()
-
-
-        self.third_frame = tk.LabelFrame(self.root, text = "Step2-2: Detect Objects")
+        self.third_frame = tk.LabelFrame(self.root, text = "Step2: Detect Objects")
         self.third_frame.pack(fill="both", expand="yes", padx=10, pady=10)
-        
+        label4 = ttk.Label(self.third_frame, text="Step1: Push 'CNN Processing' for indexing", anchor='w').pack(fill='both')
+        label5 = ttk.Label(self.third_frame, text="Step2: Select an object you want", anchor='w').pack(fill='both')
+        label6 = ttk.Label(self.third_frame, text="Step3: Push 'Extract photo with...' to copy them", anchor='w').pack(fill='both')
         ttk.Button(self.third_frame, text="CNN Processing", command= lambda: self.detection()).pack()
         self.objectvar = tk.StringVar()
         tk.Radiobutton(self.third_frame, text="Person", variable = self.objectvar, value = "Person").pack()
@@ -65,7 +65,6 @@ class finalProject:
         tk.Radiobutton(self.third_frame, text="Rock", variable = self.objectvar, value = "Rock").pack()
         tk.Radiobutton(self.third_frame, text="Water", variable = self.objectvar, value = "Water").pack()
         tk.Radiobutton(self.third_frame, text="Effel Tower", variable = self.objectvar, value = "Effel Tower").pack()
-        tk.Radiobutton(self.third_frame, text="Scene", variable = self.objectvar, value = "Scene").pack()
         ttk.Button(self.third_frame, text="Extract photo with topic above", command= lambda: self.detectionObject()).pack()
 
         # bottom_frame = tk.Frame(self.root).pack()
@@ -76,8 +75,6 @@ class finalProject:
         # myentry = tk.Label(self.fourth_frame, bd = 5).pack()
         label8 = tk.Label(self.fourth_frame, text="files will be copied to the folder assigned").pack()
         copytofolder = tk.Button(self.fourth_frame, text="Copy", command = lambda: self.copytofolder()).pack()
-        self.label9 = tk.Label(self.fourth_frame, text=self.copyprogress).pack()
-        
         
         self.quit_frame = tk.LabelFrame(self.root, text = "Quit Program")
         self.quit_frame.pack(fill="both", expand="yes", padx=10, pady=10)
@@ -88,8 +85,6 @@ class finalProject:
     def opening_files(self) -> list:
         # Tkinter object creation to handle files selection, directory selection.
         self.filesToBeProcessed = list(fd.askopenfilenames(initialdir = self.initialfolder, title='Choose a file'))
-
-        # print("myfiles = ", self.filesToBeProcessed, type(self.filesToBeProcessed))
         
 
     def opening_dir(self) -> list:
@@ -101,9 +96,7 @@ class finalProject:
         # print("dourceDirectory, filesToBeProcessed are", self.sourceDirectory, self.filesToBeProcessed)
         # print("len of files are ", len(self.filesToBeProcessed))
 
-    def nearDuplicate():
-        print("NEAR DUPLICATE FUNCTION")
-
+    
     def detectionObject(self) -> list:
         self.filesAfterProcessed = []
         # print("detectionObject. detection function start")
@@ -120,7 +113,7 @@ class finalProject:
         # It processes each files in the directory to create file path string and store in a list.
 
         self.targetDirectory = fd.askdirectory(initialdir = self.initialfolder, title = 'Choose a directory')
-        print("directory selected is ", self.targetDirectory, type(self.targetDirectory))
+        # print("directory selected is ", self.targetDirectory, type(self.targetDirectory))
 
     def copytofolder(self):
         # files = [os.path.split(myfile)[1] for myfile in self.filesAfterProcessed]          # if index 0, then it is the path of file
